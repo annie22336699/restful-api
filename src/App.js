@@ -4,6 +4,9 @@ import config from './Config';
 
 function App() {
   const [data, setData] = useState({});
+
+
+
   useEffect(() => {
     // 改async await
     (async () => {
@@ -39,6 +42,35 @@ function App() {
 
   return (
     <div className="App">
+      <div className="container">
+        {data.rows && data.rows.length ? (
+          <nav aria-label="Page navigation example">
+            <ul className="pagination">
+              <li className="page-item">
+                <a className="page-link" href="#/">
+                  Previous
+                </a>
+              </li>
+              {Array(data.totalPages)
+                .fill(1)
+                .map((el, i) => (
+                  <li className="page-item">
+                    <a className="page-link" href="#/" onClick={()=>{}}>
+                      {i + 1}
+                    </a>
+                  </li>
+                ))}
+              <li className="page-item">
+                <a className="page-link" href="#/">
+                  Next
+                </a>
+              </li>
+            </ul>
+          </nav>
+        ) : (
+          ''
+        )}
+      </div>
       <div className="container">
         <table className="table table-striped">
           <thead>
