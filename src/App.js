@@ -5,16 +5,17 @@ import config from './Config';
 function App() {
   const [data, setData] = useState({});
 
-
-
-  useEffect(() => {
-    // 改async await
+  const getData = async (page = 1) => {
     (async () => {
-      const r1 = await fetch(config.AB_LIST);
+      const r1 = await fetch(config.AB_LIST + `?page=${page}`);
       const obj = await r1.json();
       console.log(obj);
       setData(obj);
     })();
+  };
+
+  useEffect(() => {
+    getData();
   }, []);
   //  ↑上面這個[]不加會沒有default的作用，所以會瘋狂重新渲染
 
@@ -55,7 +56,13 @@ function App() {
                 .fill(1)
                 .map((el, i) => (
                   <li className="page-item">
-                    <a className="page-link" href="#/" onClick={()=>{}}>
+                    <a
+                      className="page-link"
+                      href="#/"
+                      onClick={() => {
+                        getData(i + 1);
+                      }}
+                    >
                       {i + 1}
                     </a>
                   </li>
