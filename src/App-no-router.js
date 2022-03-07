@@ -1,25 +1,22 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import config from './Config';
-import { useHistory, useLocation } from 'react-router-dom';
 
 function App() {
-  const history = useHistory();
-  const location = useLocation();
   const [data, setData] = useState({});
 
-  const getData = async (page) => {
+  const getData = async (page = 1) => {
     const obj = await (await fetch(config.AB_LIST + `?page=${page}`)).json();
+
     console.log(obj);
     setData(obj);
   };
 
   useEffect(() => {
-    const usp = new URLSearchParams(location.search);
-    const page = parseInt(usp.get('page'));
-    console.log({ page });
-    getData(page || 1);
-  }, [location.search]);
+    getData();
+  }, []);
+
+  console.log(data);
 
   const renderMe = (data) => {
     if (data.rows && data.rows.length) {
@@ -33,7 +30,11 @@ function App() {
         </tr>
       ));
     } else {
-      return null;
+      return (
+        <tr>
+          <td></td>
+        </tr>
+      );
     }
   };
 
@@ -46,14 +47,15 @@ function App() {
               <li
                 className={data.page === 1 ? 'page-item disabled' : 'page-item'}
               >
-                <button
+                <a
                   className="page-link"
+                  href="#/"
                   onClick={() => {
-                    history.push(`?page=${data.page - 1}`);
+                    getData(data.page - 1);
                   }}
                 >
                   Previous
-                </button>
+                </a>
               </li>
               {Array(data.totalPages)
                 .fill(1)
@@ -64,14 +66,15 @@ function App() {
                     }
                     key={'pageLi' + i}
                   >
-                    <button
+                    <a
                       className="page-link"
+                      href="#/"
                       onClick={() => {
-                        history.push(`?page=${i + 1}`);
+                        getData(i + 1);
                       }}
                     >
                       {i + 1}
-                    </button>
+                    </a>
                   </li>
                 ))}
               <li
@@ -81,15 +84,15 @@ function App() {
                     : 'page-item'
                 }
               >
-                <button
+                <a
                   className="page-link"
                   href="#/"
                   onClick={() => {
-                    history.push(`?page=${data.page + 1}`);
+                    getData(data.page + 1);
                   }}
                 >
                   Next
-                </button>
+                </a>
               </li>
             </ul>
           </nav>
