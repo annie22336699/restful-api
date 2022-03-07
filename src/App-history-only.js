@@ -12,6 +12,7 @@ function App() {
     history.push(`?page=${page}`);
   };
 
+  // 使用網址時每次都去讀取他在第幾頁這樣
   const getData = async (page = 1) => {
     const obj = await (await fetch(config.AB_LIST + `?page=${page}`)).json();
     console.log(obj);
